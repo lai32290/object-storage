@@ -7,6 +7,8 @@ let data;
 const app = express();
 app.use(bodyParser.json());
 
+app.use('/', isAuthorized);
+
 app.get('/', (req, res) => {
     res.send({ data, auth: process.env.OBJECT_STORAGE_AUTH });
 });
@@ -26,3 +28,14 @@ app.listen(port, () => {
     console.log(`server is listen on http://localhost:${port}`);
 });
 
+
+function isAuthorized(req, res, next) {
+    const auth = req.header('AUTH');
+
+    if (auth !== process.env.OBJECT_STORAGE_AUTH) {
+        res.send(403, '');
+        next(err);
+    }
+
+    next();
+}
