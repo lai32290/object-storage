@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 import ObjectStorage from './object-storage.js';
 
 const storage = ObjectStorage();
-const port = 3000;
+const port = 4000;
 
 const app = express();
 app.use(bodyParser.json());
@@ -25,6 +25,22 @@ app.post('/auth', (req, res) => {
     process.env.OBJECT_STORAGE_AUTH = auth;
 
     res.send();
+});
+
+app.post('/log', (req, res) => {
+    const log = req.body.data;
+    storage.log(log);
+    res.send(log);
+});
+
+app.get('/log', (req, res) => {
+    const log = storage.log();
+    res.send(log);
+});
+
+app.get('/logs', (req, res) => {
+    const logs = storage.logs();
+    res.send(logs);
 });
 
 app.listen(port, () => {
