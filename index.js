@@ -39,7 +39,7 @@ app.get('/log', (req, res) => {
 });
 
 app.get('/logs', (req, res) => {
-    const logs = storage.logs();
+    const logs = storage.getLogs();
     res.send(logs);
 });
 

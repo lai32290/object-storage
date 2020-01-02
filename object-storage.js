@@ -18,7 +18,7 @@ function ObjectStorage() {
         logs.push(message);
     }
 
-    function logs() {
+    function getLogs() {
         return logs;
     }
 
@@ -26,7 +26,7 @@ function ObjectStorage() {
         set,
         get,
         log,
-        logs
+        getLogs
     };
 }
 
