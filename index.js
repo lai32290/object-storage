@@ -10,6 +10,7 @@ const port = 4000;
 const app = express();
 const http = Http.createServer(app);
 const io = Socket(http);
+let socket;
 
 app.use(bodyParser.json());
 
@@ -22,6 +23,9 @@ app.get('/', (req, res) => {
 app.post('/', (req, res) => {
     const data = req.body.data;
     storage.set(data);
+	if (socket) {
+		socket.broadcast.emit('UPDATE');
+	}
     res.send(data);
 });
 
@@ -52,8 +56,9 @@ http.listen(port, () => {
     console.log(`server is listen on http://localhost:${port}`);
 });
 
-io.on('connection', socket => {
+io.on('connection', _socket => {
 	console.log('A user connected in socket.');
+	socket = _socket;
 });
 
 
