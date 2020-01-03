@@ -1,4 +1,6 @@
 import express from 'express';
+import Http from 'http';
+import Socket from 'socket.io';
 import bodyParser from 'body-parser';
 import ObjectStorage from './object-storage.js';
 
@@ -6,6 +8,9 @@ const storage = ObjectStorage();
 const port = 4000;
 
 const app = express();
+const http = Http.createServer(app);
+const io = Socket(http);
+
 app.use(bodyParser.json());
 
 app.use('/', isAuthorized);
@@ -43,8 +48,12 @@ app.get('/logs', (req, res) => {
     res.send(logs);
 });
 
-app.listen(port, () => {
+http.listen(port, () => {
     console.log(`server is listen on http://localhost:${port}`);
+});
+
+io.on('connection', socket => {
+	console.log('A user connected in socket.');
 });
 
 
